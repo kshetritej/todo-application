@@ -8,30 +8,34 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import {Dialog} from "@/types/alertDialog.types";
-import { Button } from "./button";
+} from "@/components/ui/alert-dialog";
+import { Dialog } from "@/types/alertDialog.types";
 
-const MyAlertDialog = ({trigger, dialogTitle, dialogDesc}:Dialog) => {
+const MyAlertDialog = ({
+  trigger,
+  buttonColor,
+  dialogTitle,
+  dialogDesc,
+}: Dialog) => {
   return (
     <div>
-<AlertDialog>
-  <AlertDialogTrigger>{trigger}</AlertDialogTrigger>
-  <AlertDialogContent>
-    <AlertDialogHeader>
-      <AlertDialogTitle>{dialogTitle}</AlertDialogTitle>
-      <AlertDialogDescription>
-      {dialogDesc}
-      </AlertDialogDescription>
-    </AlertDialogHeader>
-    <AlertDialogFooter>
-      <AlertDialogCancel>Cancel</AlertDialogCancel>
-      <AlertDialogAction className="bg-red-500">Continue</AlertDialogAction>
-    </AlertDialogFooter>
-  </AlertDialogContent>
-</AlertDialog>
+      <AlertDialog>
+        <AlertDialogTrigger>{trigger}</AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{dialogTitle}</AlertDialogTitle>
+            <AlertDialogDescription>{dialogDesc}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction className={buttonColor}>
+              Continue
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
-  )
-}
+  );
+};
 
-export default MyAlertDialog
+export default MyAlertDialog;

@@ -9,7 +9,7 @@ import {
 import { Calendar, Edit, TimerIcon, Trash } from "lucide-react";
 import { Button } from "./ui/button";
 import MyAlertDialog from "./ui/MyAlertDialog";
-import AddTodo from "./AddTodo";
+import MyTodoDialog from "./MyTodoDialog";
 
 const ListTodo = () => {
   const todo = {
@@ -39,12 +39,16 @@ const ListTodo = () => {
         </div>
         <CardFooter>
           <div className="edit-delete flex flex-wrap p-2 gap-2">
-            <Button variant={"secondary"}>
-              <Edit />
-            </Button>
+            <MyTodoDialog
+              buttonVariant="secondary"
+              trigger={<Edit />}
+              todoTitle="Edit Todo"
+              titleDesc="Edit your todo"
+            />
             <Button variant={"destructive"}>
               <MyAlertDialog
-                trigger= { <Trash/> } 
+                buttonColor="bg-red-500 hover:bg-red-300"
+                trigger={<Trash />}
                 dialogTitle="Are you sure? "
                 dialogDesc="Once the data is deleted it can't be undone. Are you sure? "
               />

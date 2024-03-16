@@ -1,5 +1,6 @@
 export type Dialog = {
-    trigger: SVGRectElement;
+    trigger: any;
+    buttonColor: string;
     dialogTitle: string;
     dialogDesc: string;
 }

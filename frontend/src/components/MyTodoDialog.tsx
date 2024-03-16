@@ -17,28 +17,30 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Plus } from "lucide-react";
 import { Button } from "./ui/button";
 import { useState } from "react";
 import { DatePickerWithPresets } from "./ui/date-picker";
+import { Plus } from "lucide-react";
 
-const AddTodo = () => {
+const MyTodoDialog = ({
+  trigger = <Plus />,
+  buttonVariant = "default",
+  todoTitle = "Add Todo",
+  titleDesc = "What are your plans? ",
+}) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   return (
     <>
       <Dialog>
         <DialogTrigger>
-          <Button>
-            {" "}
-            <Plus />{" "}
-          </Button>
+          <Button variant={buttonVariant}>{trigger}</Button>
         </DialogTrigger>
         <DialogContent>
           <Card className="border-0">
             <CardHeader>
-              <CardTitle>Add Todo</CardTitle>
-              <CardDescription>What are your plans? </CardDescription>
+              <CardTitle>{todoTitle}</CardTitle>
+              <CardDescription>{titleDesc} </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex flex-col">
@@ -71,7 +73,7 @@ const AddTodo = () => {
                 </Label>
                 <Select>
                   <SelectTrigger id="urgency">
-                    <SelectValue   placeholder="Select urgency" />
+                    <SelectValue placeholder="Select urgency" />
                   </SelectTrigger>
                   <SelectContent position="popper">
                     <SelectItem value="vimp">Very Important</SelectItem>
@@ -83,7 +85,7 @@ const AddTodo = () => {
 
               <div className="flex py-2 flex-col space-y-1 5">
                 <Label htmlFor="urgency" className="py-2">
-                 Date 
+                  Date
                 </Label>
                 <DatePickerWithPresets />
               </div>
@@ -93,7 +95,7 @@ const AddTodo = () => {
                 Cancel
               </Button>
               <Button type="submit" variant="default">
-                Add Todo
+                Save
               </Button>
             </CardFooter>
           </Card>
@@ -102,4 +104,4 @@ const AddTodo = () => {
     </>
   );
 };
-export default AddTodo;
+export default MyTodoDialog;
