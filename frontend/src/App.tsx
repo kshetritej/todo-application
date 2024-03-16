@@ -1,8 +1,8 @@
-import AddTodo from "@/components/AddTodo";
+import Topbar from "./components/Topbar";
 function App() {
   return (
     <>
-      <AddTodo/>
+      <Topbar/>
     </>
   )
 }
