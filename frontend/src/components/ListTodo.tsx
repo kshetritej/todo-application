@@ -20,8 +20,8 @@ const ListTodo = () => {
   };
   return (
     <div>
-      <Card className="flex justify-between">
-        <div className="content ">
+      <Card className="sm:flex justify-between">
+        <div className="content  col-span-6">
           <CardHeader>
             <CardTitle>{todo.title}</CardTitle>
           </CardHeader>
@@ -38,7 +38,7 @@ const ListTodo = () => {
           </CardContent>
         </div>
         <CardFooter>
-          <div className="edit-delete flex flex-wrap p-2 gap-2">
+          <div className="edit-delete flex gap-1">
             <MyTodoDialog
               buttonVariant="secondary"
               trigger={<Edit />}

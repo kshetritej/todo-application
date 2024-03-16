@@ -32,9 +32,6 @@ dependencies:
   clsx:
     specifier: ^2.1.0
     version: 2.1.0
-  date-fns:
-    specifier: ^3.5.0
-    version: 3.5.0
   lucide-react:
     specifier: ^0.358.0
     version: 0.358.0(react@18.2.0)
@@ -76,6 +73,9 @@ devDependencies:
   autoprefixer:
     specifier: ^10.4.18
     version: 10.4.18(postcss@8.4.35)
+  date-fns:
+    specifier: ^3.5.0
+    version: 3.5.0
   eslint:
     specifier: ^8.57.0
     version: 8.57.0
@@ -1916,7 +1916,6 @@ packages:
 
   /date-fns@3.5.0:
     resolution: {integrity: sha512-a+DwyXn7NOfdJireCzAA0B9p7jIXEu/Q9JKCyMYvH6+0vPUNbQceA0neXrdfJ/xzl3mhOh5vibQQ3936Tssm6A==}
-    dev: false
 
   /debug@4.3.4:
     resolution: {integrity: sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==}
