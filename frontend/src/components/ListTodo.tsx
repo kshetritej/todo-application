@@ -1,3 +1,5 @@
+import {  useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import {
   Card,
   CardContent,
@@ -12,50 +14,60 @@ import MyAlertDialog from "./ui/MyAlertDialog";
 import MyTodoDialog from "./MyTodoDialog";
 
 const ListTodo = () => {
-  const todo = {
-    title: "Hello",
-    description: "This is todo description lorem ipsum dolor sit amet mor dia ",
-    urgency: "Very Urgent",
-    date: "Janauary 15",
-  };
+  // const client = useQueryClient();
+
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["getTodo"],
+    queryFn: () =>
+      axios.get(`${import.meta.env.VITE_API_URL}/todos`).then((res) => res.data),
+  });
+
+  if(!data) return <>No data found.</>
+  if(isLoading) return <>Loading .... </>
+  if(isError) return <>Error occured while fetching data, {error}</>
   return (
     <div>
-      <Card className="sm:flex justify-between">
-        <div className="content  col-span-6">
-          <CardHeader>
-            <CardTitle>{todo.title}</CardTitle>
-          </CardHeader>
-          <CardContent className="gap-2 flex flex-col">
-            <CardDescription>{todo.description}</CardDescription>
-            <div className="flex gap-2">
-              <Button variant={"secondary"}>
-                <TimerIcon /> &nbsp; {todo.urgency}
-              </Button>
-              <Button variant={"secondary"}>
-                <Calendar /> &nbsp; {todo.date}
-              </Button>
+      {data.map((todo, idx) => {
+        return (
+          <Card className="sm:flex justify-between" key={idx}>
+            <div className="content  col-span-6">
+              <CardHeader>
+                <CardTitle>{todo?.Title}</CardTitle>
+              </CardHeader>
+              <CardContent className="gap-2 flex flex-col">
+                <CardDescription>{todo?.Description}</CardDescription>
+                <div className="flex gap-2">
+                  <Button variant={"secondary"}>
+                    <TimerIcon /> &nbsp; {todo?.Urgency}
+                  </Button>
+                  <Button variant={"secondary"}>
+                    <Calendar /> &nbsp; {todo?.DueDate}
+                  </Button>
+                </div>
+              </CardContent>
             </div>
-          </CardContent>
-        </div>
-        <CardFooter>
-          <div className="edit-delete flex gap-1">
-            <MyTodoDialog
-              buttonVariant="secondary"
-              trigger={<Edit />}
-              todoTitle="Edit Todo"
-              titleDesc="Edit your todo"
-            />
-            <Button variant={"destructive"}>
-              <MyAlertDialog
-                buttonColor="bg-red-500 hover:bg-red-300"
-                trigger={<Trash />}
-                dialogTitle="Are you sure? "
-                dialogDesc="Once the data is deleted it can't be undone. Are you sure? "
-              />
-            </Button>
-          </div>
-        </CardFooter>
-      </Card>
+            <CardFooter>
+              <div className="edit-delete flex gap-1">
+                <MyTodoDialog
+                  buttonVariant="secondary"
+                  trigger={<Edit />}
+                  todoTitle="Edit Todo"
+                  titleDesc="Edit your todo"
+                />
+                <Button variant={"destructive"}>
+                  <MyAlertDialog
+                    buttonColor="bg-red-500 hover:bg-red-300"
+                    trigger={<Trash />}
+                    dialogTitle="Are you sure? "
+                    dialogDesc="Once the data is deleted it can't be undone. Are you sure? "
+                  />
+                </Button>
+              </div>
+            </CardFooter>
+          </Card>
+        );
+      })}
+      ;
     </div>
   );
 };
