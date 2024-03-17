@@ -6,7 +6,64 @@
 		"parameters": {},
 		"requestBodies": {},
 		"responses": {},
-		"schemas": {},
+		"schemas": {
+			"Todo": {
+				"properties": {
+					"TodoId": {
+						"type": "string"
+					},
+					"Title": {
+						"type": "string"
+					},
+					"Description": {
+						"type": "string"
+					},
+					"Urgency": {
+						"type": "string"
+					},
+					"DueDate": {
+						"type": "string"
+					},
+					"CreatedAt": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"TodoId",
+					"Title",
+					"Description",
+					"Urgency",
+					"DueDate",
+					"CreatedAt"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"AddTodoValidator": {
+				"properties": {
+					"Title": {
+						"type": "string"
+					},
+					"Description": {
+						"type": "string"
+					},
+					"Urgency": {
+						"type": "string"
+					},
+					"DueDate": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"Title",
+					"Description",
+					"Urgency",
+					"DueDate"
+				],
+				"type": "object",
+				"additionalProperties": false
+			}
+		},
 		"securitySchemes": {}
 	},
 	"info": {
@@ -17,7 +74,102 @@
 		},
 		"contact": {}
 	},
-	"paths": {},
+	"paths": {
+		"/todos": {
+			"get": {
+				"operationId": "GetTodo",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/Todo"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/todo/{TodoId}": {
+			"get": {
+				"operationId": "GetOneTodo",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Todo"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "TodoId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/todo": {
+			"post": {
+				"operationId": "AddTodo",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/Todo"
+										},
+										{
+											"properties": {
+												"error": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"error"
+											],
+											"type": "object"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/AddTodoValidator"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
 	"servers": [
 		{
 			"url": "/"

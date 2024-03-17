@@ -22,5 +22,5 @@ export class Todo  extends BaseEntity{
     @Column({
         name: "created_at",
     })
-    CreatedAt: Date;
+    CreatedAt: string;
 }
