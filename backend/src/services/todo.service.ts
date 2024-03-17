@@ -1,4 +1,5 @@
 import { Todo } from "../entities/todo.entity";
+import { UpdateTodoValidator } from "../validations/updateTodo.validation";
 import { AddTodoValidator } from "../validations/AddTodo.validation";
 
 
@@ -17,21 +18,13 @@ class TodoService {
 
     async AddTodo(body: AddTodoValidator) {
         try {
-            // Todo.insert({
-            //     Title : body.Title,
-            //     Description : body.Description,
-            //     Urgency : body.Urgency,
-            //     DueDate : body.DueDate,
-            //     CreatedAt : new Date().toString()
-
-            // })
             const todo = new Todo();
             todo.Title = body.Title;
             todo.Description = body.Description;
             todo.Urgency = body.Urgency;
             todo.DueDate = body.DueDate;
             todo.CreatedAt = Date.now().toString();
-            todo.save();
+            await todo.save();
 
             return todo;
         } catch (error) {
@@ -39,6 +32,26 @@ class TodoService {
                 "error":"sorry dude can't perform the action",
             }
         }
+    }
+
+    async UpdateTodo(TodoId: string, _body:UpdateTodoValidator){
+        const todo = await Todo.findOne({
+            where:{
+                TodoId,
+            }
+        });
+        
+        if(!todo) {
+            console.log(`No todo in list of id ${TodoId}`);
+            return;
+        }
+        todo.Title = _body.Title ?? todo.Title,
+        todo.Description = _body.Description ?? todo.Description,
+        todo.Urgency = _body.Urgency ?? todo.Urgency,
+        todo.DueDate == _body.DueDate ?? todo.DueDate,
+    
+        await todo.save();
+        return  todo;
     }
 }
 

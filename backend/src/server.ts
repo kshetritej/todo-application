@@ -11,8 +11,9 @@ const swaggerDocument = require('../build/swagger.json');
 const app = express();
 app.use(express.json());
 RegisterRoutes(app);
-app.use(ErrorHandler.errorHandler);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use(ErrorHandler.errorHandler);
+app.use(ErrorHandler.notFoundHandler);
 
 AppDataSource.initialize()
     .then(() => {

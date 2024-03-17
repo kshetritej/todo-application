@@ -27,7 +27,12 @@ class ErrorHandler {
 
         next();
     }
+    notFoundHandler(_req:express.Request, res: ExResponse) {
+        res.status(404).send({
+            message: "Not Found",
+        });
 
+    }
 }
 
 export default new ErrorHandler;
