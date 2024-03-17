@@ -1,4 +1,4 @@
-import { Controller, Get, Route,Post, Body, Request, Patch, Path } from "tsoa";
+import { Controller, Get, Route,Post, Body, Request, Patch, Path, Delete } from "tsoa";
 import express from "express";
 import  TodoService  from "../services/todo.service";
 import { AddTodoValidator } from "../validations/AddTodo.validation";
@@ -27,6 +27,14 @@ class TodoController extends Controller{
     async UpdateTodo(@Path() TodoId: string, @Body() _body: UpdateTodoValidator){
         const update = await TodoService.UpdateTodo(TodoId, _body);
         return update;
+    }
+
+    @Delete("/todo/:TodoId")
+    async DeleteTodo(@Path() TodoId: string){
+        await TodoService.deleteTodo(TodoId);
+        return {
+            "message":"todo deleted successfully",
+        };
     }
 
 }
