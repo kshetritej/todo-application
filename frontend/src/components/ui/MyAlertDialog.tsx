@@ -16,6 +16,7 @@ const MyAlertDialog = ({
   buttonColor,
   dialogTitle,
   dialogDesc,
+  action
 }: Dialog) => {
   return (
     <div>
@@ -28,7 +29,7 @@ const MyAlertDialog = ({
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction className={buttonColor}>
+            <AlertDialogAction className={buttonColor} onClick={action}>
               Continue
             </AlertDialogAction>
           </AlertDialogFooter>

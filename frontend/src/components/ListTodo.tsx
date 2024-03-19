@@ -1,5 +1,6 @@
-import { useQueryClient, useQuery } from "@tanstack/react-query";
+import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import MyTodoDialog from "./MyTodoDialog";
 import {
   Card,
   CardContent,
@@ -8,17 +9,22 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { todo } from "@/types/todo.types";
 import { Calendar, Edit, TimerIcon, Trash } from "lucide-react";
 import { Button } from "./ui/button";
-import MyAlertDialog from "./ui/MyAlertDialog";
-import MyTodoDialog from "./MyTodoDialog";
-
 const ListTodo = () => {
   const client = useQueryClient();
-
-  
-
-
   //get Todo
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["getTodo"],
@@ -34,23 +40,24 @@ const ListTodo = () => {
   if (!data) return <>No data found.</>;
   if (isLoading) return <>Loading .... </>;
   if (isError) return <>Error occured while fetching data, {error}</>;
+
   return (
     <div>
-      {data.map((todo: todo, idx: number) => {
+      {data.map((task: todo, idx: number) => {
         return (
           <Card className="sm:flex justify-between flex-wrap  m-4" key={idx}>
             <div className="content  col-span-6">
               <CardHeader>
-                <CardTitle>{todo?.Title}</CardTitle>
+                <CardTitle>{task?.Title}</CardTitle>
               </CardHeader>
               <CardContent className="gap-2 flex flex-col">
-                <CardDescription>{todo?.Description}</CardDescription>
+                <CardDescription>{task?.Description}</CardDescription>
                 <div className="flex gap-2 flex-wrap">
                   <Button variant={"secondary"}>
-                    <TimerIcon /> &nbsp; {todo?.Urgency}
+                    <TimerIcon /> &nbsp; {task?.Urgency}
                   </Button>
                   <Button variant={"secondary"}>
-                    <Calendar /> &nbsp; {todo?.DueDate}
+                    <Calendar /> &nbsp; {task?.DueDate}
                   </Button>
                 </div>
               </CardContent>
@@ -64,12 +71,23 @@ const ListTodo = () => {
                   titleDesc="Edit your todo"
                 />
                 <Button variant={"destructive"}>
-                  <MyAlertDialog
-                    buttonColor="bg-red-500 hover:bg-red-300"
-                    trigger={<Trash />}
-                    dialogTitle="Are you sure? "
-                    dialogDesc="Once the data is deleted it can't be undone. Are you sure? "
-                  />
+                  <AlertDialog>
+                    <AlertDialogTrigger> <Trash/> </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle> Are you sure ?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                        Once item is deleted it can't be undone. Delete task?
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction> 
+                          Continue 
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </Button>
               </div>
             </CardFooter>
