@@ -31,6 +31,7 @@ import { CalendarIcon, Plus } from "lucide-react";
 import { format } from "date-fns";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { valueResetter } from "@/utils/FormReset.util";
 
 const MyTodoDialog = ({
   trigger = <Plus />,
@@ -57,6 +58,12 @@ const MyTodoDialog = ({
         })
         .then(() => {
           console.log(`todo added`);
+          //@ts-ignore
+          setName("");
+          setDescription("");
+          setUrgency("");
+          setDate(null);
+          console.log("are values resetted?");
           return data;
         }),
   });
@@ -88,7 +95,6 @@ const MyTodoDialog = ({
                   value={name}
                   onChange={(e) => {
                     setName(e.target.value);
-                    console.log(name);
                   }}
                   className="col-span-3"
                 />

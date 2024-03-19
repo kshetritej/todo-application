@@ -1,3 +1,4 @@
+import cors from "cors";
 import express from "express";
 import AppDataSource from "./configs/db.config";
 import EnvEnvironment from "./configs/env.config";
@@ -10,6 +11,7 @@ const swaggerDocument = require('../build/swagger.json');
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 RegisterRoutes(app);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(ErrorHandler.errorHandler);
