@@ -31,7 +31,16 @@ import { CalendarIcon, Plus } from "lucide-react";
 import { format } from "date-fns";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { valueResetter } from "@/utils/FormReset.util";
+
+const formatDate = (date: Date) => {
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });
+
+  return formatter.format(date);
+};
 
 const MyTodoDialog = ({
   trigger = <Plus />,
@@ -42,7 +51,7 @@ const MyTodoDialog = ({
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [urgency, setUrgency] = useState("");
-  const [date, setDate] = useState<Date>();
+  const [date, setDate] = useState<Date>(new Date());
 
   //Lets add some todos
 
@@ -54,7 +63,7 @@ const MyTodoDialog = ({
           Title: name,
           Description: description,
           Urgency: urgency,
-          DueDate: date?.toString(),
+          DueDate:formatDate(date) 
         })
         .then(() => {
           console.log(`todo added`);
@@ -62,7 +71,7 @@ const MyTodoDialog = ({
           setName("");
           setDescription("");
           setUrgency("");
-          setDate(null);
+          setDate(new Date());
           console.log("are values resetted?");
           return data;
         }),
@@ -156,6 +165,7 @@ const MyTodoDialog = ({
                     <Calendar
                       mode="single"
                       selected={date}
+                      //@ts-ignore
                       onSelect={setDate}
                       className="rounded-md border"
                     />
