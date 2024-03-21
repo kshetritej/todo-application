@@ -30,6 +30,7 @@ import { CalendarIcon, Plus } from "lucide-react";
 import { format } from "date-fns";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { MyModalProps } from "@/types/MyModalProps.types";
 
 const formatDate = (date: Date) => {
   const formatter = new Intl.DateTimeFormat("en-US", {
@@ -42,31 +43,31 @@ const formatDate = (date: Date) => {
 };
 
 const MyTodoDialog = ({
-  mode = "add",
+  //@ts-ignore
+  task = "",
+  mode = "Add",
   trigger = <Plus />,
   buttonVariant = "default",
-  todoTitle = "Add Todo",
-  titleDesc = "What are your plans? ",
-}) => {
+}: MyModalProps) => {
   const editMode = mode == "add" ? false : true;
-  const [urgency, setUrgency] = useState(editMode ? "urgency to edit" : "");
+  const [urgency, setUrgency] = useState(editMode ? task.Urgency : "");
   const [formData, setFormData] = useState({
-    taskName: editMode ? "taskName " : "",
-    description: "",
-    // urgency: "",
+    taskName: editMode ? task.Title : "",
+    description: editMode ? task.Description : "",
   });
-  console.log(urgency);
 
-  const [date, setDate] = useState<Date>(new Date());
+  //@ts-ignore
 
-  const handleChange = (e:any) => {
+  const [date, setDate] = useState<Date>(editMode ? task.DueDate : new Date());
+
+  const handleChange = (e: any) => {
     const { name, value } = e.target;
     setFormData((formData) => ({
       ...formData,
       [name]: value,
     }));
   };
-  console.log(formData);
+
   //Lets add some todos
   const { mutate } = useMutation({
     mutationKey: ["addTodo"],
@@ -99,8 +100,12 @@ const MyTodoDialog = ({
         </DialogTrigger>
         <DialogContent>
           <CardHeader>
-            <CardTitle>{todoTitle}</CardTitle>
-            <CardDescription>{titleDesc} </CardDescription>
+            <CardTitle>{mode} Todo!</CardTitle>
+            <CardDescription>
+              {mode == "Add"
+                ? "Add some todos for yourself"
+                : "What led you to edit this, huh?"}{" "}
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col">
@@ -180,9 +185,7 @@ const MyTodoDialog = ({
           </CardContent>
 
           <CardFooter className="flex justify-between">
-            <Button variant="secondary">
-              Cancel
-            </Button>
+            <Button variant="secondary">Cancel</Button>
             {/*@ts-ignore*/}
             <Button type="button" onClick={mutate} variant="default">
               Save

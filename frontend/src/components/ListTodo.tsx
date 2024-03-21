@@ -65,17 +65,16 @@ const ListTodo = () => {
             <CardFooter>
               <div className="edit-delete flex gap-1">
                 <MyTodoDialog
-                  todoTitle="Edit Todo"
+                  task={task}
                   trigger={<Edit2 />}
-                  titleDesc="Edit your todo"
-                  mode={"edit"}
+                  mode={"Edit"}
+                  buttonVariant={'secondary'}
                 />
 
                 <Button variant={"destructive"}>
                   <AlertDialog>
                     <AlertDialogTrigger>
-                      {" "}
-                      <Trash />{" "}
+                      <Trash />
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
