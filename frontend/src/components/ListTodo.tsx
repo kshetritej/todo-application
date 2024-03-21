@@ -23,8 +23,10 @@ import {
 import { todo } from "@/types/todo.types";
 import { Calendar, Edit, TimerIcon, Trash } from "lucide-react";
 import { Button } from "./ui/button";
+import { useState } from "react";
 const ListTodo = () => {
   const client = useQueryClient();
+  const [mode, setMode] = useState("add");
   //get Todo
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["getTodo"],
@@ -69,6 +71,7 @@ const ListTodo = () => {
                   trigger={<Edit />}
                   todoTitle="Edit Todo"
                   titleDesc="Edit your todo"
+                  mode = "edit"
                 />
                 <Button variant={"destructive"}>
                   <AlertDialog>

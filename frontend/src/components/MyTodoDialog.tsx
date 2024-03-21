@@ -48,29 +48,40 @@ const MyTodoDialog = ({
   todoTitle = "Add Todo",
   titleDesc = "What are your plans? ",
 }) => {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
   const [urgency, setUrgency] = useState("");
+  const [formData, setFormData] = useState({
+    taskName: "",
+    description: "",
+    // urgency: "",
+  });
+  console.log(urgency)
+
   const [date, setDate] = useState<Date>(new Date());
 
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setFormData((formData) => ({
+      ...formData,
+      [name]: value,
+    }));
+  };
+  console.log(formData)
   //Lets add some todos
   const { mutate, isError, isPending } = useMutation({
     mutationKey: ["addTodo"],
-    mutationFn: (data: todo) =>
+    mutationFn: (data) =>
       axios
         .post(`${import.meta.env.VITE_API_URL}/todo`, {
-          Title: name,
-          Description: description,
+          Title: formData.taskName,
+          Description: formData.description,
           Urgency: urgency,
           DueDate: formatDate(date),
         })
         .then(() => {
-          //@ts-ignore
-          setName("");
-          setDescription("");
-          setUrgency("");
-          setDate(new Date());
-          console.log("are values resetted?");
+          // setFormData((formData) => ({
+          //   ...formData,
+          //   const {key,value} = useState({[key]:""})
+          // }));
           return data;
         }),
   });
@@ -98,22 +109,22 @@ const MyTodoDialog = ({
               <br />
               <Input
                 id="name"
-                value={name}
-                onChange={(e) => {
-                  setName(e.target.value);
-                }}
+                name="taskName"
+                value={formData.taskName}
+                onChange={handleChange}
                 className="col-span-3"
               />
             </div>
             <div className="flex flex-col">
-              <Label htmlFor="desc" className="py-4">
+              <Label htmlFor="description" className="py-4">
                 Description
               </Label>
               <br />
               <Textarea
-                id="desc"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                name="description"
+                id="description"
+                value={formData.description}
+                onChange={handleChange}
                 placeholder="set some description dude."
               />
             </div>
@@ -122,16 +133,18 @@ const MyTodoDialog = ({
                 Urgency
               </Label>
               <Select
+                name="urgency"
                 value={urgency}
-                onValueChange={(value) => setUrgency(value)}
+                onValueChange={(value)=> setUrgency(value)}
+
               >
-                <SelectTrigger id="urgency" value={urgency}>
-                  <SelectValue placeholder="Select urgency" />
+                <SelectTrigger name="urgency" id="urgency" value={urgency}>
+                  <SelectValue  placeholder="Select urgency"/>
                 </SelectTrigger>
                 <SelectContent position="popper">
                   <SelectItem value={"vimportant"}>Very Important</SelectItem>
-                  <SelectItem value={"normal"}>Normal</SelectItem>
-                  <SelectItem value={"not-important"}>Not Important</SelectItem>
+                  <SelectItem  value={"normal"}>Normal</SelectItem>
+                  <SelectItem  value={"not-important"}>Not Important</SelectItem>
                 </SelectContent>
               </Select>
             </div>
