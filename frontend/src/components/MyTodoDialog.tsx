@@ -30,7 +30,6 @@ import { CalendarIcon, Plus } from "lucide-react";
 import { format } from "date-fns";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { todo } from "@/types/todo.types";
 
 const formatDate = (date: Date) => {
   const formatter = new Intl.DateTimeFormat("en-US", {
@@ -43,31 +42,33 @@ const formatDate = (date: Date) => {
 };
 
 const MyTodoDialog = ({
+  mode = "add",
   trigger = <Plus />,
   buttonVariant = "default",
   todoTitle = "Add Todo",
   titleDesc = "What are your plans? ",
 }) => {
-  const [urgency, setUrgency] = useState("");
+  const editMode = mode == "add" ? false : true;
+  const [urgency, setUrgency] = useState(editMode ? "urgency to edit" : "");
   const [formData, setFormData] = useState({
-    taskName: "",
+    taskName: editMode ? "taskName " : "",
     description: "",
     // urgency: "",
   });
-  console.log(urgency)
+  console.log(urgency);
 
   const [date, setDate] = useState<Date>(new Date());
 
-  const handleChange = (e) => {
-    const { name, value } = e.target
+  const handleChange = (e:any) => {
+    const { name, value } = e.target;
     setFormData((formData) => ({
       ...formData,
       [name]: value,
     }));
   };
-  console.log(formData)
+  console.log(formData);
   //Lets add some todos
-  const { mutate, isError, isPending } = useMutation({
+  const { mutate } = useMutation({
     mutationKey: ["addTodo"],
     mutationFn: (data) =>
       axios
@@ -135,16 +136,15 @@ const MyTodoDialog = ({
               <Select
                 name="urgency"
                 value={urgency}
-                onValueChange={(value)=> setUrgency(value)}
-
+                onValueChange={(value) => setUrgency(value)}
               >
                 <SelectTrigger name="urgency" id="urgency" value={urgency}>
-                  <SelectValue  placeholder="Select urgency"/>
+                  <SelectValue placeholder="Select urgency" />
                 </SelectTrigger>
                 <SelectContent position="popper">
                   <SelectItem value={"vimportant"}>Very Important</SelectItem>
-                  <SelectItem  value={"normal"}>Normal</SelectItem>
-                  <SelectItem  value={"not-important"}>Not Important</SelectItem>
+                  <SelectItem value={"normal"}>Normal</SelectItem>
+                  <SelectItem value={"not-important"}>Not Important</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -180,7 +180,9 @@ const MyTodoDialog = ({
           </CardContent>
 
           <CardFooter className="flex justify-between">
-            <Button variant="secondary">Cancel</Button>
+            <Button variant="secondary">
+              Cancel
+            </Button>
             {/*@ts-ignore*/}
             <Button type="button" onClick={mutate} variant="default">
               Save

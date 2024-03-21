@@ -1,4 +1,4 @@
-import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import { useQueryClient, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import MyTodoDialog from "./MyTodoDialog";
 import {
@@ -21,12 +21,10 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { todo } from "@/types/todo.types";
-import { Calendar, Edit, TimerIcon, Trash } from "lucide-react";
+import { Calendar, Edit2, TimerIcon, Trash } from "lucide-react";
 import { Button } from "./ui/button";
-import { useState } from "react";
 const ListTodo = () => {
   const client = useQueryClient();
-  const [mode, setMode] = useState("add");
   //get Todo
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["getTodo"],
@@ -67,27 +65,28 @@ const ListTodo = () => {
             <CardFooter>
               <div className="edit-delete flex gap-1">
                 <MyTodoDialog
-                  buttonVariant="secondary"
-                  trigger={<Edit />}
                   todoTitle="Edit Todo"
+                  trigger={<Edit2 />}
                   titleDesc="Edit your todo"
-                  mode = "edit"
+                  mode={"edit"}
                 />
+
                 <Button variant={"destructive"}>
                   <AlertDialog>
-                    <AlertDialogTrigger> <Trash/> </AlertDialogTrigger>
+                    <AlertDialogTrigger>
+                      {" "}
+                      <Trash />{" "}
+                    </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
                         <AlertDialogTitle> Are you sure ?</AlertDialogTitle>
                         <AlertDialogDescription>
-                        Once item is deleted it can't be undone. Delete task?
+                          Once item is deleted it can't be undone. Delete task?
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction> 
-                          Continue 
-                        </AlertDialogAction>
+                        <AlertDialogAction>Continue</AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>
