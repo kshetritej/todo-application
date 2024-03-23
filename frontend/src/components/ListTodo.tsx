@@ -34,7 +34,7 @@ const ListTodo = () => {
         .get(`${import.meta.env.VITE_API_URL}/todos`)
         .then((res) => res.data),
   });
-  const { mutate: deleteTodo, isSuccess } = useMutation({
+  const { mutate: deleteTodo} = useMutation({
     mutationKey: ["deleteTodo"],
     mutationFn: (TodoId: string) =>
       axios
@@ -42,7 +42,6 @@ const ListTodo = () => {
         .then((res) => res.data),
   });
 
-  if (isSuccess) console.log("todo deleted successfully");
   client.invalidateQueries({
     queryKey: ["getTodo"],
   });
@@ -79,6 +78,7 @@ const ListTodo = () => {
                   trigger={<Edit2 />}
                   mode={"Edit"}
                   buttonVariant={"secondary"}
+                  todoId={task.TodoId}
                 />
 
                 <Button variant={"destructive"}>

@@ -1,4 +1,4 @@
-import { Inbox } from "lucide-react";
+import { Inbox, Plus } from "lucide-react";
 import MyTodoDialog from "./MyTodoDialog";
 const Topbar = () => {
   return (
@@ -7,7 +7,7 @@ const Topbar = () => {
         <h1 className="text-2xl flex gap-2 font-bold align-items-center justify-center"> <span className="py-1"><Inbox/> </span>Todo </h1>
       </div>
       <div>
-        <MyTodoDialog/>
+        <MyTodoDialog mode={"Add"} trigger={<Plus/>} buttonVariant={"default"}/>
       </div>
     </div>
   );

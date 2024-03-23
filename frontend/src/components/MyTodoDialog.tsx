@@ -26,38 +26,29 @@ import {
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "./ui/button";
 import { useState } from "react";
-import { CalendarIcon, Plus } from "lucide-react";
+import { CalendarIcon} from "lucide-react";
 import { format } from "date-fns";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { MyModalProps } from "@/types/MyModalProps.types";
-
-const formatDate = (date: Date) => {
-  const formatter = new Intl.DateTimeFormat("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-
-  return formatter.format(date);
-};
+import { formatDate } from "@/utils/DateFormatter.util";
 
 const MyTodoDialog = ({
   //@ts-ignore
   task = "",
-  mode = "Add",
-  trigger = <Plus />,
-  buttonVariant = "default",
+  mode,
+  trigger,
+  buttonVariant,
+  todoId,
 }: MyModalProps) => {
-  const editMode = mode == "add" ? false : true;
+  const editMode = mode == "Add" ? false : true;
   const [urgency, setUrgency] = useState(editMode ? task.Urgency : "");
   const [formData, setFormData] = useState({
     taskName: editMode ? task.Title : " ",
     description: editMode ? task.Description : " ",
   });
 
-  //@ts-ignore
-
+  // @ts-ignore
   const [date, setDate] = useState<Date>(editMode ? task.DueDate : new Date());
 
   const handleChange = (e: any) => {
@@ -69,9 +60,9 @@ const MyTodoDialog = ({
   };
 
   //Lets add some todos
-  const { mutate:addTodo } = useMutation({
+  const { mutate: addTodo } = useMutation({
     mutationKey: ["addTodo"],
-    mutationFn: (data) =>
+    mutationFn: () =>
       axios
         .post(`${import.meta.env.VITE_API_URL}/todo`, {
           Title: formData.taskName,
@@ -79,29 +70,25 @@ const MyTodoDialog = ({
           Urgency: urgency,
           DueDate: formatDate(date),
         })
-        .then(() => {
-          // setFormData((formData) => ({
-          //   ...formData,
-          //   const {key,value} = useState({[key]:""})
-          // }));
-          return data;
+        .then((res) => {
+          return res.data;
         }),
   });
 
   // edit todo
-  // const { mutate: editTodo } = useMutation({
-  //   mutationKey: ["EditTodo"],
-  //   mutationFn: (data) => {
-  //     axios
-  //       .patch(`${import.meta.env.VITE_API_URL}/todo/${data.TodoId}`,{
-  //         Title: formData.taskName,
-  //         Description: formData.description,
-  //         Urgency: urgency,
-  //         DueDate: formatDate(date),
-  //       })
-  //       .then((res) => res.data);
-  //   },
-  // });
+  const { mutate: editTodo } = useMutation({
+    mutationKey: ["editTodo"],
+    mutationFn: () => 
+      axios
+        .patch(`${import.meta.env.VITE_API_URL}/todo/${todoId}`, {
+          Title: formData.taskName,
+          Description: formData.description,
+          Urgency: urgency,
+          DueDate: formatDate(date),
+        })
+        .then((res) => res.data)
+  });
+
   useQueryClient().invalidateQueries({
     queryKey: ["getTodo"],
   });
@@ -201,8 +188,11 @@ const MyTodoDialog = ({
 
           <CardFooter className="flex justify-between">
             <Button variant="secondary">Cancel</Button>
-            {/*@ts-ignore*/}
-            <Button type="button" onClick={addTodo } variant="default">
+            <Button
+              type="button"
+              onClick={()=> editMode ? editTodo()  : addTodo()}
+              variant="default"
+            >
               Save
             </Button>
           </CardFooter>
