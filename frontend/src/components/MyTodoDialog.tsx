@@ -76,19 +76,27 @@ const MyTodoDialog = ({
   });
 
   // edit todo
-  const { mutate: editTodo } = useMutation({
-    mutationKey: ["editTodo"],
-    mutationFn: () => 
-      axios
-        .patch(`${import.meta.env.VITE_API_URL}/todo/${todoId}`, {
-          Title: formData.taskName,
-          Description: formData.description,
-          Urgency: urgency,
-          DueDate: formatDate(date),
-        })
-        .then((res) => res.data)
-  });
+  // const { mutate: editTodo } = useMutation({
+  //   mutationKey: ["editTodo"],
+  //   mutationFn: (todoId) => 
+  //     axios
+  //       .patch(`${import.meta.env.VITE_API_URL}/todo/${todoId}`, {
+  //         Title: formData.taskName,
+  //         Description: formData.description,
+  //         Urgency: urgency,
+  //         DueDate: formatDate(date),
+  //       })
+  //       .then((res) => res.data)
+  // });
 
+  const update = (todoId : string) =>{
+    axios.patch(`${import.meta.env.VITE_API_URL}/todo/${todoId}`,{
+      Title: formData.taskName,
+      Description: formData.description,
+      Urgency: urgency,
+      DueDate: date
+    }).then(res => res.data).then(window.location.reload())
+  }
   useQueryClient().invalidateQueries({
     queryKey: ["getTodo"],
   });
@@ -190,7 +198,7 @@ const MyTodoDialog = ({
             <Button variant="secondary">Cancel</Button>
             <Button
               type="button"
-              onClick={()=> editMode ? editTodo()  : addTodo()}
+              onClick={()=> editMode ? update(todoId)  : addTodo()}
               variant="default"
             >
               Save
