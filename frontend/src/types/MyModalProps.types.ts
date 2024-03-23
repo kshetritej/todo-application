@@ -5,4 +5,7 @@ export type MyModalProps = {
     mode: string;
     trigger: any;
     buttonVariant: string;
+    editTodo?: any;
+        
+    
 }

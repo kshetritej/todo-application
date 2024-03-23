@@ -1,4 +1,4 @@
-import { useQueryClient, useQuery } from "@tanstack/react-query";
+import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import MyTodoDialog from "./MyTodoDialog";
 import {
@@ -25,6 +25,7 @@ import { Calendar, Edit2, TimerIcon, Trash } from "lucide-react";
 import { Button } from "./ui/button";
 const ListTodo = () => {
   const client = useQueryClient();
+
   //get Todo
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["getTodo"],
@@ -33,6 +34,15 @@ const ListTodo = () => {
         .get(`${import.meta.env.VITE_API_URL}/todos`)
         .then((res) => res.data),
   });
+  const { mutate: deleteTodo, isSuccess } = useMutation({
+    mutationKey: ["deleteTodo"],
+    mutationFn: (TodoId: string) =>
+      axios
+        .delete(`${import.meta.env.VITE_API_URL}/todo/${TodoId}`)
+        .then((res) => res.data),
+  });
+
+  if (isSuccess) console.log("todo deleted successfully");
   client.invalidateQueries({
     queryKey: ["getTodo"],
   });
@@ -68,7 +78,7 @@ const ListTodo = () => {
                   task={task}
                   trigger={<Edit2 />}
                   mode={"Edit"}
-                  buttonVariant={'secondary'}
+                  buttonVariant={"secondary"}
                 />
 
                 <Button variant={"destructive"}>
@@ -85,7 +95,12 @@ const ListTodo = () => {
                       </AlertDialogHeader>
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction>Continue</AlertDialogAction>
+                        {/*@ts-ignore*/}
+                        <AlertDialogAction
+                          onClick={() => deleteTodo(task.TodoId)}
+                        >
+                          Continue
+                        </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>

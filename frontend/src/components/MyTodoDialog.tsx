@@ -52,8 +52,8 @@ const MyTodoDialog = ({
   const editMode = mode == "add" ? false : true;
   const [urgency, setUrgency] = useState(editMode ? task.Urgency : "");
   const [formData, setFormData] = useState({
-    taskName: editMode ? task.Title : "",
-    description: editMode ? task.Description : "",
+    taskName: editMode ? task.Title : " ",
+    description: editMode ? task.Description : " ",
   });
 
   //@ts-ignore
@@ -69,7 +69,7 @@ const MyTodoDialog = ({
   };
 
   //Lets add some todos
-  const { mutate } = useMutation({
+  const { mutate:addTodo } = useMutation({
     mutationKey: ["addTodo"],
     mutationFn: (data) =>
       axios
@@ -87,6 +87,21 @@ const MyTodoDialog = ({
           return data;
         }),
   });
+
+  // edit todo
+  // const { mutate: editTodo } = useMutation({
+  //   mutationKey: ["EditTodo"],
+  //   mutationFn: (data) => {
+  //     axios
+  //       .patch(`${import.meta.env.VITE_API_URL}/todo/${data.TodoId}`,{
+  //         Title: formData.taskName,
+  //         Description: formData.description,
+  //         Urgency: urgency,
+  //         DueDate: formatDate(date),
+  //       })
+  //       .then((res) => res.data);
+  //   },
+  // });
   useQueryClient().invalidateQueries({
     queryKey: ["getTodo"],
   });
@@ -187,7 +202,7 @@ const MyTodoDialog = ({
           <CardFooter className="flex justify-between">
             <Button variant="secondary">Cancel</Button>
             {/*@ts-ignore*/}
-            <Button type="button" onClick={mutate} variant="default">
+            <Button type="button" onClick={addTodo } variant="default">
               Save
             </Button>
           </CardFooter>
